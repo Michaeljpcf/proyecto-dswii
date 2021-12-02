@@ -11,7 +11,7 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="css/style.css">
-    <title>EXÁMEN DSWII CL03</title>
+    <title>PROYECTO DSWII</title>
 </head>
   <body>
     <div id="loader-wrapper" class="text-center">
@@ -22,7 +22,7 @@
     <header>
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
           <div class="container">
-              <a class="navbar-brand" href="#">EXÁMEN DSWII CL03</a>
+              <a class="navbar-brand" href="#">PROYECTO: LIBRERIA</a>
               <button
               class="navbar-toggler"
               type="button"
@@ -36,13 +36,23 @@
               </button>
               <div class="collapse navbar-collapse" id="navbarNav">
                   <ul class="navbar-nav ml-auto">
-                      <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="user" data-toggle="dropdown">
-                        </a>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#" id="logout">Cerrar Sesión</a>
-                        </div>
-                      </li>
+                    <li class="nav-item dropdown logged-out" style="display: none;">
+                      <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                        <i class="fas fa-user-circle" style="font-size: 21px;"></i>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#signinModal">Iniciar Sesión</a>
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#signupModal">Registrase</a>
+                      </div>
+                    </li>
+                    <li class="nav-item dropdown logged-in" style="display: none;">
+                      <a class="nav-link dropdown-toggle" href="#" id="user" data-toggle="dropdown">
+                        <i class="fas fa-user-circle" style="font-size: 21px;"></i>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" href="#" id="logout">Cerrar Sesión</a>
+                      </div>
+                    </li>
                   </ul>
               </div>
           </div>
@@ -52,7 +62,7 @@
     <div class="container" id="table-libro" style="padding-top: 50px;">
       <h1 class="text-center text-uppercase" style="margin-bottom: 20px;">Libros</h1>
       <div class="form-group">
-        <button class="btn btn-success btn-lg" data-toggle="modal" data-target="#modalLibro">
+        <button class="btn btn-success btn-lg createContact" data-toggle="modal" data-target="#modalLibro">
           Nuevo Libro
         </button>
       </div>
@@ -71,6 +81,61 @@
         <tbody id="containerLibro">
         </tbody>
       </table>
+    </div>
+
+
+    <!-- REGISTER -->
+    <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">REGISTRARSE</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="signup-form">
+              <div class="form-group">
+                  <input type="email" id="signup-email" class="form-control" placeholder="Correo" required>
+              </div>
+              <div class="form-group">
+                  <input type="password" id="signup-password" class="form-control" placeholder="Contraseña" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Registrarse</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="modal fade" id="signinModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">INICIAR SESIÓN</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="signin-form">
+                <div class="form-group">
+                  <label class="form-label float-left">Ingrese su correo</label>
+                  <input type="email" id="signin-email" class="form-control" placeholder="Correo electrónico" required="" autofocus="">
+                </div>
+                <div class="form-group">
+                  <label class="form-label float-left">Contraseña</label>
+                  <input type="password" id="signin-password" class="form-control" placeholder="Contraseña" required="">
+                </div>
+                  <button type="submit" class="btn btn-secondary btn-block">Ingresar con Correo personal</button>
+                  <button type="button" class="btn btn-danger btn-block" id="googleLogin">Ingresar con Google</button>
+                  <button type="button" class="btn btn-primary btn-block" id="facebookLogin">Ingresar con Facebook</button>
+              </form>
+            </div>
+          </div>
+        </div>
     </div>
 
 
@@ -235,13 +300,13 @@
       const auth = firebase.auth();
       const db = firebase.firestore();
 
-      auth.onAuthStateChanged((user) => {
-        if (!user) {        
-            location.replace("login.html")
-        } else {
-          document.getElementById("user").innerHTML = user.email
-        }
-      })   
+      // auth.onAuthStateChanged((user) => {
+      //   if (!user) {        
+      //       location.replace("index.html")
+      //   } else {
+      //     document.getElementById("user").innerHTML = user.email
+      //   }
+      // })   
        
 
     </script>

@@ -1,18 +1,3 @@
-// Cerrar Sesión
-const logout = document.querySelector('#logout');
-logout.addEventListener('click', (e) => {
-    e.preventDefault();
-    auth.signOut().then(() => {
-        console.log('sign out');
-    })
-});
-
-$(window).on('load', function() {
-  $('body').addClass('loaded');
-});
-
-
-
 // TODO: SUBIR UNA IMAGEN
 var subirImagen = (file, uid) => {
     const imagenesStorage = firebase
@@ -77,7 +62,7 @@ document.getElementById("formFileImagen").addEventListener("change", e => {
     const file = e.target.files[0];
     const user = firebase.auth().currentUser;
     subirImagen(file, user.uid);
-  })
+})
   
 document.getElementById("formFileExcel").addEventListener("change", e => {
     const file = e.target.files[0];
@@ -124,30 +109,43 @@ window.addEventListener('DOMContentLoaded', async (e) => {
             `;
             const btnDelete = document.querySelectorAll('.btn-delete');
             btnDelete.forEach(btn => {
-                btn.addEventListener('click', async (e) => {
-                    const doc = await getLibro(e.target.dataset.id);
-                    console.log(doc.data());
-                    const Libro = doc.data();
-                    Swal.fire({
-                        title: `¿Está seguro que deseas eliminar a ${Libro.name}?`,
-                        text: "No podrás revertir esto!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Si, eliminar!'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            deleteLibro(e.target.dataset.id);
-                            Swal.fire(
-                                'Eliminado!',
-                                `El libro ${libro.name} fue Eliminado.`,
-                                'success'
-                            )
-                        }
+                auth.onAuthStateChanged((user) => {
+                    btn.addEventListener('click', async (e) => {
+                        if (!user) {        
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Tienes que estar logueado para eliminar',
+                                showConfirmButton: false,
+                                timer: 1500
+                            }) 
+                        } else {
+                            btn.addEventListener('click', async (e) => {
+                                const doc = await getLibro(e.target.dataset.id);
+                                console.log(doc.data());
+                                const Libro = doc.data();
+                                Swal.fire({
+                                    title: `¿Está seguro que deseas eliminar a ${Libro.name}?`,
+                                    text: "No podrás revertir esto!",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'Si, eliminar!'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        deleteLibro(e.target.dataset.id);
+                                        Swal.fire(
+                                            'Eliminado!',
+                                            `El libro ${libro.name} fue Eliminado.`,
+                                            'success'
+                                        )
+                                    }
+                                })                                
+                            })  
+                        }                        
                     })
-                    
-                })
+                }) 
+                
             });
 
             const btnUpdate = document.querySelectorAll('.btn-update');
