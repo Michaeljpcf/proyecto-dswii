@@ -118,30 +118,28 @@ window.addEventListener('DOMContentLoaded', async (e) => {
                                 showConfirmButton: false,
                                 timer: 1500
                             }) 
-                        } else {
-                            btn.addEventListener('click', async (e) => {
-                                const doc = await getLibro(e.target.dataset.id);
-                                console.log(doc.data());
-                                const Libro = doc.data();
-                                Swal.fire({
-                                    title: `¿Está seguro que deseas eliminar a ${Libro.name}?`,
-                                    text: "No podrás revertir esto!",
-                                    icon: 'warning',
-                                    showCancelButton: true,
-                                    confirmButtonColor: '#3085d6',
-                                    cancelButtonColor: '#d33',
-                                    confirmButtonText: 'Si, eliminar!'
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        deleteLibro(e.target.dataset.id);
-                                        Swal.fire(
-                                            'Eliminado!',
-                                            `El libro ${libro.name} fue Eliminado.`,
-                                            'success'
-                                        )
-                                    }
-                                })                                
-                            })  
+                        } else {                            
+                            const doc = await getLibro(e.target.dataset.id);
+                            console.log(doc.data());
+                            const Libro = doc.data();
+                            Swal.fire({
+                                title: `¿Está seguro que deseas eliminar a ${Libro.name}?`,
+                                text: "No podrás revertir esto!",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Si, eliminar!'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    deleteLibro(e.target.dataset.id);
+                                    Swal.fire(
+                                        'Eliminado!',
+                                        `El libro ${libro.name} fue Eliminado.`,
+                                        'success'
+                                    )
+                                }
+                            })   
                         }                        
                     })
                 }) 
