@@ -33,26 +33,26 @@ var subirImagen = (file, uid) => {
 };
 
 // TODO: SUBIR UN ARCHIVO EXCEL
-var subirExcel = (file, uid) => {
-    const excelsStorage = firebase.storage().ref(`excels/${uid}/${file.name}`);
-    const taskExcel = excelsStorage.put(file);
-    taskExcel.on(
+var subirPDF = (file, uid) => {
+    const pdfStorage = firebase.storage().ref(`pdfs/${uid}/${file.name}`);
+    const taskPdf = pdfStorage.put(file);
+    taskPdf.on(
       "state_changed",
       (snapshot) => {
         const porcentaje =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        document.getElementById("progressExcel").style.width = `${porcentaje}%`;
+        document.getElementById("progressPdf").style.width = `${porcentaje}%`;
       },
-      (err) => alert(`Error subiendo el Excel => ${err.message}`),
+      (err) => alert(`Error subiendo el PDF => ${err.message}`),
       () => {
-        taskExcel.snapshot.ref
+        taskPdf.snapshot.ref
           .getDownloadURL()
           .then((url) => {
             console.log(url);
-            sessionStorage.setItem("excNewPost", url);
+            sessionStorage.setItem("pdfNewPost", url);
           })
           .catch((err) => {
-            alert(`Error obteniendo downlaodURL Excel => ${err.message}`);
+            alert(`Error obteniendo downlaodURL PDF => ${err.message}`);
           });
       }
     );
@@ -64,10 +64,10 @@ document.getElementById("formFileImagen").addEventListener("change", e => {
     subirImagen(file, user.uid);
 })
   
-document.getElementById("formFileExcel").addEventListener("change", e => {
+document.getElementById("formFilePdf").addEventListener("change", e => {
     const file = e.target.files[0];
     const user = firebase.auth().currentUser;
-    subirExcel(file, user.uid);
+    subirPDF(file, user.uid);
 })
 
 
@@ -101,7 +101,7 @@ window.addEventListener('DOMContentLoaded', async (e) => {
                 <th>${libro.genero}</th>
                 <th>${libro.paginas}</th>
                 <td><a href='${libro.imagenUrl}'><img src='${libro.imagenUrl}' width='50px' height='50px'></a></td>
-                <td><a href='${libro.excelUrl}'><i class="fas fa-file-excel"></i></a></td>
+                <td><a href='${libro.pdfUrl}'><i class="fas fa-file-pdf"></i></a></td>
                 <th>
                     <button class="btn btn-danger btn-delete" data-id="${libro.id}">Eliminar</button>
                 </th>
@@ -163,7 +163,7 @@ window.addEventListener('DOMContentLoaded', async (e) => {
                     updateBtn['generoU'].value = libro.genero;
                     updateBtn['paginasU'].value = libro.paginas;
                     updateBtn['formFileImagen'].file = libro.imagenUrl;
-                    updateBtn['formFileExcel'].file = libro.excelUrl;
+                    updateBtn['formFileExcel'].file = libro.pdfUrl;
                 })
             })
         });
@@ -179,16 +179,16 @@ updateBtn.addEventListener('submit', async (e) => {
     const genero = updateBtn['generoU'];
     const paginas = updateBtn['paginasU']; 
     const imagenUrl = updateBtn['formFileImagen']; 
-    const excelUrl = updateBtn['formFileExcel']; 
+    const pdfUrl = updateBtn['formFileExcel']; 
     
     const nameU = document.querySelector('#nameU').value;
     const autorU = document.querySelector('#autorU').value;
     const generoU = document.querySelector('#generoU').value;
     const paginasU = document.querySelector('#paginasU').value;
     const imagenUrlU = document.querySelector('#formFileImagen').file;
-    const excelUrlU = document.querySelector('#formFileExcel').file;
+    const pdfUrlU = document.querySelector('#formFileExcel').file;
     
-    if (nameU != "" && autorU != "" && generoU != "" && paginasU != "" && imagenUrlU != "" && excelUrlU != "") {
+    if (nameU != "" && autorU != "" && generoU != "" && paginasU != "" && imagenUrlU != "" && pdfUrlU != "") {
 
         Swal.fire({
             icon: 'success',
@@ -203,7 +203,7 @@ updateBtn.addEventListener('submit', async (e) => {
             genero: genero.value,
             paginas: paginas.value,
             imagenUrl: sessionStorage.getItem('imgNewPost') == 'null'  ? null : sessionStorage.getItem('imgNewPost'),
-            excelUrl: sessionStorage.getItem('excNewPost') == 'null'  ? null : sessionStorage.getItem('excNewPost')
+            pdfUrl: sessionStorage.getItem('pdfNewPost') == 'null'  ? null : sessionStorage.getItem('pdfNewPost')
         })
 
         updateBtn.reset();
@@ -228,7 +228,7 @@ createBtn.addEventListener('submit', async (e) => {
     const genero = document.querySelector('#genero').value;
     const paginas = document.querySelector('#paginas').value;
     const imagenUrl = sessionStorage.getItem('imgNewPost') == 'null'  ? null : sessionStorage.getItem('imgNewPost')
-    const excelUrl = sessionStorage.getItem('excNewPost') == 'null'  ? null : sessionStorage.getItem('excNewPost')
+    const pdfUrl = sessionStorage.getItem('pdfNewPost') == 'null'  ? null : sessionStorage.getItem('pdfNewPost')
 
     if (name != "" && autor != "" && genero != "" && paginas != "") {
         Swal.fire({
@@ -238,7 +238,7 @@ createBtn.addEventListener('submit', async (e) => {
             timer: 1500
         })     
     
-        await saveLibro(name,autor,genero,paginas,imagenUrl,excelUrl);
+        await saveLibro(name,autor,genero,paginas,imagenUrl,pdfUrl);
         createBtn.reset(); 
         $('#modalLibro').modal('hide');
         window.location.reload();
@@ -253,7 +253,7 @@ createBtn.addEventListener('submit', async (e) => {
     }
 })
 
-const saveLibro = (name,autor,genero,paginas,imagenUrl,excelUrl) => 
+const saveLibro = (name,autor,genero,paginas,imagenUrl,pdfUrl) => 
     db
     .collection('libros').doc().set({
         name,
@@ -261,5 +261,5 @@ const saveLibro = (name,autor,genero,paginas,imagenUrl,excelUrl) =>
         genero,
         paginas,
         imagenUrl,
-        excelUrl
+        pdfUrl
     });

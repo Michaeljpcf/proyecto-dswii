@@ -1,8 +1,8 @@
 const inputs = document.querySelectorAll('.validForm input');
 
 const expresiones = {
-	name: /^[a-zA-ZÀ-ÿ\s]{3,50}$/,
-	autor: /^[a-zA-ZÀ-ÿ\s]{3,50}$/,
+	name: /^[a-zA-Z0-9À-ÿ\s]{3,50}$/,
+    autor: /^[a-zA-ZÀ-ÿ\s]{3,50}$/,
 	genero: /^[a-zA-ZÀ-ÿ\s,]{3,50}$/,
 	paginas: /^[0-9]{1,10}$/
 }

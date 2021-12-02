@@ -45,8 +45,8 @@ signinForm.addEventListener('submit', (e) => {
           signinForm.reset();
           $('#signinModal').modal('hide')
           console.log('sign in');
-        })  
-    
+          window.location.reload();  
+        })        
 });
 
 // Login Google
